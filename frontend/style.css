@@ -18,3 +18,17 @@ body {
     overflow-y: auto;
     box-shadow: 2px 0 5px rgba(0,0,0,0.1);
 }
+
+.main-content {
+    flex: 1;
+    margin-left: 250px;
+    padding: 40px;
+    background-color: #f8f9fa;
+}
+
+.card {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 0.125rem 0.25rem rgba(211, 163, 163, 0.075);
+    margin-bottom: 20px;
+}
