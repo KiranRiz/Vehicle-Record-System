@@ -70,7 +70,7 @@ body {
 }
 
 .container {
-    max-width: 600px;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 20px;
 }
@@ -84,12 +84,6 @@ section {
     display: block;
 }
 
-.containerInput {
-    max-width: 1000px;
-    margin: 20px auto;
-    padding: 20px;
-
-}
 
 .form-group {
     margin-bottom: 15px;
@@ -113,8 +107,6 @@ section {
 #input .card {
     width: 100%;           
     text-align: left;       
-    padding: 25px;
-    box-sizing: border-box;
 }
 
 .card-header h2 {
