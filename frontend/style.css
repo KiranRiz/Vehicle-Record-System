@@ -81,7 +81,8 @@ section{
 
 .containerInput{
     max-width: 600px;
-    margin-top: 20px;
+    margin: 20px auto;
+    padding: 20px;
 
 }
 
@@ -103,8 +104,25 @@ section{
             box-sizing: border-box;
  }
 
+ input .card{
+    width: auto;
+    text-align: left;
+    padding: 25px;
+
+
+ }
+
 .card-header h2 {
     margin-top: 0;
     margin-bottom: 20px;
     color: #333;
+}
+
+button[type="submit"] {
+    margin-top: 10px;
+    cursor: pointer;
+    border: none;
+    background-color: #7cacb7;
+    font-size: 16px;
+    width: 100px;
 }
