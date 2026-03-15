@@ -21,7 +21,7 @@
 
     <!-- home page -->
     <div class="main-content">
-        <section id="home" class="section active">
+        <section id="home" class="section">
             <h2>Welcome to Vehicle Record System</h2>
             <h2>Manage your vehicle's service records efficiently</h2>
             <div class="cards">
@@ -47,7 +47,7 @@
 
 
         <!-- input section -->
-        <section id="input" class="section">
+        <section id="input" class="section active">
             <div class="containerInput">
                 <div class="card">
                     <div class="card-header">
@@ -55,9 +55,40 @@
                     </div>
                     <div class="card-body">
                         <form id="serviceForm">
+
                             <div class="form-group">
                                 <label for="vehicleName">Vehicle Name</label>
                                 <input type="text" id="vehicleName" placeholder="e.g, Toyota Camry">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="regNo">Registration No.</label>
+                                <input type="text" id="regNo" placeholder="e.g., ABC12" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="ownerName">Owner Name</label>
+                                <input type="text" id="ownerName" placeholder="e.g., John Doe" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="mobile">Mobile No.</label>
+                                <input type="tel" id="mobile" placeholder="e.g., 1234567890" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="mileage">Mileage (km)</label>
+                                <input type="number" id="mileage" placeholder="Enter mileage" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="serviceDate">Service Date</label>
+                                <input type="date" id="serviceDate" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="parts">Parts Changed</label>
+                                <textarea id="parts" rows="3" placeholder="e.g., Oil Filter, Air Filter"required></textarea>
                             </div>
 
 
