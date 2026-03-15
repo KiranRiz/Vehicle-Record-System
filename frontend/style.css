@@ -73,6 +73,38 @@ text-align: center;
     padding: 20px;
 }
 
+section{
+    display: none;
+}
+
+.section.active{
+    display: block;
+}
+
+.container{
+    max-width: 600px;
+    margin-top: 20px;
+
+}
+
+.form-group{
+    margin-bottom: 15px;
+}
+
+.form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+}
+
+ .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+ }
+
 .card-header h2 {
     margin-top: 0;
     margin-bottom: 20px;

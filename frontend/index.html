@@ -13,41 +13,44 @@
 
     <div class="sidebar">
         <h2>Vehicle bar info</h2>
-        <a href="index.html" class="active"> Home </a>
-        <a href="input.html"> Input Data </a>
-        <a href="records.html"> View Records </a>
-        <a href="vehicle-info.html"> Vehicle Information </a>
+        <a href="#" onclick="showSection('home')" class="active" id="link-home">Home</a>
+        <a href="#" onclick="showSection('input')" id="link-input">Input Data</a>
+        <a href="#" onclick="showSection('records')" id="link-records">View Records</a>
+        <a href="#" onclick="showSection('vehicle')" id="link-vehicle">Vehicle Information</a>
     </div>
 
 
 
+    <!-- home page -->
     <div class="main-content">
-        <section>
+        <section id="home" class="section active">
             <h2>Welcome to Vehicle Record System</h2>
             <h2>Manage your vehicle's service records efficiently</h2>
             <div class="cards">
                 <div class="card">
                     <h3>Input Data</h3>
                     <p>Add new vehicle service records with detailed information.</p>
-                    <button onclick="window.location.href='input.html'">Go to Input Data</button>
+                    <button onclick="showSection('input')">Go to Input Data</button>
                 </div>
 
                 <div class="card">
                     <h3>View Records</h3>
                     <p>Access and manage all your vehicle service records.</p>
-                    <button onclick="window.location.href='records.html'">Go to Records</button>
+                    <button onclick="showSection('records')">Go to Records</button>
                 </div>
 
                 <div class="card">
                     <h3>Vehicle Information</h3>
                     <p>Manage additional vehicle details and history.</p>
-                    <button onclick="window.location.href='vehicle-info.html'">Go to Vehicle Info</button>
+                    <button onclick="showSection('vehicle')">Go to Vehicle Info</button>
                 </div>
             </div>
     </div>
     </section>
 
-    <section id="input-data">
+
+    <!-- input section -->
+    <section id="input-data" class="section">
         <div class="container">
             <div class="card">
                 <div class="card-header">
@@ -57,10 +60,10 @@
                     <form id="serviceForm">
                         <div class="form-group">
                             <label for="vehicleName">Vehicle Name</label>
-                            <input type="text" id="vehicleName" placeholder="e.g, Toyota Camry" require
+                            <input type="text" id="vehicleName" placeholder="e.g, Toyota Camry" required>
                         </div>
 
-                        
+
                     </form>
 
                 </div>
