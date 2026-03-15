@@ -51,12 +51,12 @@ background: rgb(34, 21, 21);
 padding: 20px;
 width: 250px;
 border-radius: 8px;
-box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+box-shadow: rgb(173, 212, 220);
 text-align: center;
 }
 
 .card button{
-    background: rgb(114, 134, 143);
+    background: rgb(159, 178, 187);
     color: white;
     border: none;
     padding: 10px 15px;
