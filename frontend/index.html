@@ -47,7 +47,7 @@
 
 
         <!-- input section -->
-        <section id="input" class="section active">
+        <section id="input" class="section">
             <div class="container">
                 <div class="card">
                     <div class="card-header">
@@ -104,11 +104,47 @@
 
         </section>
 
+
         <!-- for record section -->
-        <section id="records" class="section">
-            <h2>Service Records</h2>
-            <p>Records will appear here</p>
+        <section id="records" class="section active">
+            <div class="container">
+                <h2>Service Records</h2>
+                <div class="search-box">
+                    <input type="text" placeholder="Search records..." id="searchRecords">
+                </div>
+                <div class="table-responsive">
+                    <table id="recordsTable">
+                        <thead>
+                            <tr>
+                                <th>Vehicle Name</th>
+                                <th>Registration No.</th>
+                                <th>Owner Name</th>
+                                <th>Mobile No.</th>
+                                <th>Mileage (km)</th>
+                                <th>Service Date</th>
+                                <th>Parts Changed</th>
+                                <th>Additional Info</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recordsBody">
+                            <!-- data will be added in table using JS -->
+                            <tr>
+                                <td colspan="9" style="text-align: center; color: #999;">No records found</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </section>
+
+
+
+
+
+
+
+
         <!-- for vehivle info -->
         <section id="vehicle" class="section">
             <h2>Vehicle Information</h2>

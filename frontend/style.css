@@ -69,10 +69,10 @@ body {
     cursor: pointer;
 }
 
-.container {
+#input .container {
     max-width: 100%;
     margin: 0 auto;
-    padding: 20px;
+    padding: 10px;
 }
 
 
@@ -86,13 +86,13 @@ section {
 
 
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .form-group label {
     display: block;
     margin-bottom: 5px;
-    font-weight: bold;
+    font-weight: normal;
 }
 
 .form-group input,
@@ -122,4 +122,28 @@ button[type="submit"] {
     background-color: #7cacb7;
     font-size: 16px;
     width: 100%;
+}
+
+#records .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+#records h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
 }
