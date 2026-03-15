@@ -147,3 +147,19 @@ th, td {
     text-align: left;
     border-bottom: 1px solid #ddd;
 }
+
+#vehicle .container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+#vehicle .search-group {
+    display: flex;
+    gap: 10px;
+}
+
+#vehicle .save-btn {
+    width: 100%;
+    margin-top: 10px;
+}

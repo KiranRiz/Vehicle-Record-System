@@ -143,12 +143,30 @@
 
 
 
-
-
         <!-- for vehivle info -->
         <section id="vehicle" class="section">
-            <h2>Vehicle Information</h2>
-            <p>Vehicle info will appear here</p>
+            <div class="container">
+                <h2>Vehicle Additional Information</h2>
+                <p class="info-text">Here you can add more information about the vehicle such as insurance details,service history, etc.</p>
+
+                <div class="form-group">
+                    <label for="regNumber">Registration Number</label>
+                    <div class="search-group">
+                        <input type="text" id="regNumber" placeholder="Enter or select registration number">
+                        <button class="search-btn">Search</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="additionalInfo">Additional Information</label>
+                    <textarea id="additionalInfo" rows="5"placeholder="Enter additional vehicle information here"></textarea>
+                    <button class="save-btn" onclick="saveVehicleInfo()">Save Information</button>
+                </div>
+            </div>
+
+
+
+
         </section>
 
     </div>
