@@ -30,9 +30,6 @@ body {
     transition: 0.3s;
 }
 
-.main-content {
-    width: calc(100% - 240px);
-}
 
 .main-content section h2 {
     text-align: center;
@@ -69,6 +66,7 @@ body {
 
 #input .container {
     max-width: 100%;
+    width: calc(100% - 240px);
     margin: 0 auto;
     padding: 10px;
 }
