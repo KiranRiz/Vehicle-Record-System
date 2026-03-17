@@ -1,4 +1,5 @@
 let records = [];
+let editIndex = null;
 
 document.addEventListener('DOMContentLoaded', function () {
     showSection('home');
@@ -46,7 +47,7 @@ function renderTable() {
     if (!tbody)
         return;
     if (records.length === 0) {
-        tbody.innerHTML = '<tr><td colSpan="9" style="text-align: center;">No records found.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align: center;">No records found.</td></tr>';
         return;
     }
     let html = '';
@@ -88,13 +89,22 @@ function setupForm() {
         };
 
         if (!newRec.vehicle || !newRec.reg) {
-            alert('Vehicle Name and Registration No. are required!');
+            showToast('Vehicle Name and Registration No. are required!');
             return;
         }
-        records.push(newRec);
+
+
+        if (editIndex !== null) {
+            records[editIndex] = newRec;
+            editIndex = null;
+            document.querySelector('.card-header h2').innerText = 'Add Vehicle Service Record';
+            showToast('Record updated!');
+        } else {
+            records.push(newRec);
+            showToast('Record added!');
+        }
         renderTable();
         form.reset();
-        alert('Record added!');
     });
 }
 
@@ -105,7 +115,7 @@ function editRecord(index) {
     document.getElementById('ownerName').value = r.owner || '';
     document.getElementById('mobile').value = r.mobile || '';
     document.getElementById('mileage').value = r.mileage || '';
-    document.getElementById('serviceDate').value = r.serviceDate || '';
+    document.getElementById('serviceDate').value = r.date || '';
     document.getElementById('parts').value = r.parts || '';
     editIndex = index;
     document.querySelector('.card-header h2').innerText = 'Edit Vehicle Service Record';
@@ -138,3 +148,11 @@ function saveVehicle() {
     alert('Save functionality coming soon!');
 }
 
+function showToast(message, type = 'success') {
+    const toast = document.getElementById("toast");
+    toast.textContent = message;         
+    toast.className = 'toast show ' + type;           
+    setTimeout(function() {
+        toast.className = 'toast';                     
+    }, 3000);
+}
