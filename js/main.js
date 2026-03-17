@@ -81,9 +81,9 @@ function setupForm() {
             reg: document.getElementById('regNo')?.value.trim() || '',
             owner: document.getElementById('ownerName')?.value.trim() || '',
             mobile: document.getElementById('mobile')?.value.trim() || '',
-            milete: document.getElementById('serviceDate')?.value || '',
-            parage: document.getElementById('mileage')?.value || '',
-            dats: document.getElementById('parts')?.value.trim() || '',
+            mileage: document.getElementById('mileage')?.value || '',
+            parts: document.getElementById('parts')?.value || '',
+            date: document.getElementById('serviceDate')?.value.trim() || '',
             addInfo: ''
         };
 
@@ -96,6 +96,20 @@ function setupForm() {
         form.reset();
         alert('Record added!');
     });
+}
+
+function editRecord(index) {
+    const r = records[index];
+    document.getElementById('vehicleName').value = r.vehicle || '';
+    document.getElementById('regNo').value = r.reg || '';
+    document.getElementById('ownerName').value = r.owner || '';
+    document.getElementById('mobile').value = r.mobile || '';
+    document.getElementById('mileage').value = r.mileage || '';
+    document.getElementById('serviceDate').value = r.serviceDate || '';
+    document.getElementById('parts').value = r.parts || '';
+    editIndex = index;
+    document.querySelector('.card-header h2').innerText = 'Edit Vehicle Service Record';
+    showSection('input');
 }
 
 function deleteRecord(index) {
