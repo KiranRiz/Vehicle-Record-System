@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     showSection('home');
+    setupNavigation();
 
 });
 
@@ -17,4 +18,32 @@ function showSection(sectionId) {
             link.classList.add('active');
         }
     });
+}
+
+function setupNavigation() {
+    document.querySelectorAll('.sidebar a[data-section]').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const sectionId = this.getAttribute('data-section');
+            showSection(sectionId);
+        });
+    });
+
+      document.querySelectorAll('.card button[data-section]').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const sectionId = this.getAttribute('data-section');
+            showSection(sectionId);
+        });
+    });
+}
+
+
+
+function searchVehicle() {
+    alert('Search functionality coming soon!');
+}
+
+
+function saveVehicle() {
+    alert('Save functionality coming soon!');
 }
