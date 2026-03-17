@@ -43,32 +43,30 @@ function setupNavigation() {
 
 function renderTable() {
     const tbody = document.getElementById('recordsBody');
-    if (tbody) return;
+    if (!tbody)
+        return;
     if (records.length === 0) {
         tbody.innerHTML = '<tr><td colSpan="9" style="text-align: center;">No records found.</td></tr>';
         return;
     }
-
     let html = '';
-    records.forEach(r, i) => {
-        html += <tr>
+    records.forEach((r, i) => {
+        html += `<tr>
             <td>${r.vehicle || ''}</td>
             <td>${r.reg || ''}</td>
             <td>${r.owner || ''}</td>
             <td>${r.mobile || ''}</td>
-            <td>${r.milete || ''}</td>
+            <td>${r.mileage || ''}</td>
             <td>${r.date || ''}</td>
             <td>${r.parts || ''}</td>
             <td>${r.addInfo || ''}</td>
             <td>
-                <button onClick="editRecord(${i})">Edit</button>
-                <button onClick="deleteRecord(${i})">Delete</button>
+                <button onclick="editRecord(${i})">Edit</button>
+                <button onclick="deleteRecord(${i})">Delete</button>
             </td>
-
-        </tr>
-        tbody.innerHTML = html;
-    }
-
+        </tr>`;
+    });
+    tbody.innerHTML = html;
 
 
 }
@@ -100,6 +98,12 @@ function setupForm() {
     });
 }
 
+function deleteRecord(index) {
+    if (confirm('Delete this record?')) {
+        records.splice(index, 1);
+        renderTable();
+    }
+}
 
 
 
