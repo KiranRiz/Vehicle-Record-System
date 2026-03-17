@@ -123,10 +123,9 @@ function editRecord(index) {
 }
 
 function deleteRecord(index) {
-    if (confirm('Delete this record?')) {
-        records.splice(index, 1);
-        renderTable();
-    }
+    records.splice(index, 1);
+    renderTable();
+    showToast('Record Deleted');
 }
 
 
@@ -148,11 +147,11 @@ function saveVehicle() {
     alert('Save functionality coming soon!');
 }
 
-function showToast(message, type = 'success') {
+function showToast(message) {
     const toast = document.getElementById("toast");
-    toast.textContent = message;         
-    toast.className = 'toast show ' + type;           
-    setTimeout(function() {
-        toast.className = 'toast';                     
+    toast.textContent = message;
+    toast.className = 'toast show ';
+    setTimeout(function () {
+        toast.className = 'toast';
     }, 3000);
 }
