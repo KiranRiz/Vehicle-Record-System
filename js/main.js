@@ -140,18 +140,36 @@ function deleteRecord(index) {
 
 
 function searchVehicle() {
-    alert('Search functionality coming soon!');
+ showToast('Please enter a registration number');
 }
 
 function saveVehicle() {
-    alert('Save functionality coming soon!');
+    const regInput = document.getElementById('regNumber');
+    const infoTextarea = document.getElementById('additionalInfo');
+    const reg = regInput.value.trim();
+    const info = infoTextarea.value.trim();
+
+    if (!reg) {
+        showToast('Please enter a registration number');
+        return;
+    }
+    const index = records.findIndex(r => r.reg.toLowerCase() === reg.toLowerCase());
+    if (index !== -1) {
+        // Update additional info
+        records[index].addInfo = info;
+        renderTable();          
+        showToast('Additional information saved');
+
+    } else {
+        showToast('No vehicle found with this registration number');
+    }
 }
 
-function showToast(message) {
-    const toast = document.getElementById("toast");
-    toast.textContent = message;
-    toast.className = 'toast show ';
-    setTimeout(function () {
-        toast.className = 'toast';
-    }, 3000);
-}
+    function showToast(message) {
+        const toast = document.getElementById("toast");
+        toast.textContent = message;
+        toast.className = 'toast show ';
+        setTimeout(function () {
+            toast.className = 'toast';
+        }, 3000);
+    }
