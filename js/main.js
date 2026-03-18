@@ -131,14 +131,6 @@ function deleteRecord(index) {
 
 
 
-
-
-
-
-
-
-
-
 function searchVehicle() {
  const regInput = document.getElementById('regNumber');
     const reg = regInput.value.trim();
@@ -157,7 +149,7 @@ function searchVehicle() {
     }
 }
 
-function saveVehicle() {
+function saveVehicleInfo() {
     const regInput = document.getElementById('regNumber');
     const infoTextarea = document.getElementById('additionalInfo');
     const reg = regInput.value.trim();
