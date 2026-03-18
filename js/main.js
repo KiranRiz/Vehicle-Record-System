@@ -140,7 +140,21 @@ function deleteRecord(index) {
 
 
 function searchVehicle() {
- showToast('Please enter a registration number');
+ const regInput = document.getElementById('regNumber');
+    const reg = regInput.value.trim();
+
+    if (!reg) {
+        showToast('Please enter a registration number');
+        return;
+    }
+
+    const found = records.some(r => r.reg.toLowerCase() === reg.toLowerCase());
+
+    if (found) {
+        showToast('Vehicle found');
+    } else {
+        showToast('No vehicle found with this registration number');
+    }
 }
 
 function saveVehicle() {
