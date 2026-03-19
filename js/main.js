@@ -1,12 +1,13 @@
+const API_BASE = '/api/records';
+
 let records = [];
 let editIndex = null;
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
     showSection('home');
     setupNavigation();
-    renderTable();
+    await loadRecords();
     setupForm();
-
 });
 
 function showSection(sectionId) {
@@ -58,7 +59,7 @@ function renderTable() {
             <td>${r.owner || ''}</td>
             <td>${r.mobile || ''}</td>
             <td>${r.mileage || ''}</td>
-            <td>${r.date || ''}</td>
+            <td>${r.date ? new Date(r.date).toLocaleDateString() : ''}</td>
             <td>${r.parts || ''}</td>
             <td>${r.addInfo || ''}</td>
             <td>
@@ -68,15 +69,45 @@ function renderTable() {
         </tr>`;
     });
     tbody.innerHTML = html;
+}
 
+async function loadRecords() {
+    try {
+        const res = await fetch(API_BASE);
+        if (!res.ok) throw new Error('Failed to load records');
+        records = await res.json();
+    } catch (err) {
+        console.error(err);
+        showToast('Unable to load records from server');
+    }
+    renderTable();
+}
 
+async function addRecord(record) {
+    const res = await fetch(API_BASE, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(record),
+    });
+
+    if (!res.ok) {
+        const body = await res.json().catch(() => null);
+        const message = body?.error || 'Failed to save record';
+        throw new Error(message);
+    }
+
+    return res.json();
 }
 
 function setupForm() {
     const form = document.getElementById('serviceForm');
     if (!form) return;
-    form.addEventListener('submit', function (e) {
+
+    form.addEventListener('submit', async function (e) {
         e.preventDefault();
+
         const newRec = {
             vehicle: document.getElementById('vehicleName')?.value.trim() || '',
             reg: document.getElementById('regNo')?.value.trim() || '',
@@ -93,18 +124,27 @@ function setupForm() {
             return;
         }
 
-
         if (editIndex !== null) {
             records[editIndex] = newRec;
             editIndex = null;
             document.querySelector('.card-header h2').innerText = 'Add Vehicle Service Record';
             showToast('Record updated!');
-        } else {
-            records.push(newRec);
-            showToast('Record added!');
+            renderTable();
+            form.reset();
+            return;
         }
-        renderTable();
-        form.reset();
+
+        try {
+            const created = await addRecord(newRec);
+            records.unshift(created);
+            showToast('Record added!');
+            renderTable();
+            form.reset();
+            showSection('records');
+        } catch (err) {
+            console.error(err);
+            showToast(err.message || 'Failed to save record');
+        }
     });
 }
 
