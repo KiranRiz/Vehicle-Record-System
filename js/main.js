@@ -125,12 +125,32 @@ function setupForm() {
         }
 
         if (editIndex !== null) {
-            records[editIndex] = newRec;
-            editIndex = null;
-            document.querySelector('.card-header h2').innerText = 'Add Vehicle Service Record';
-            showToast('Record updated!');
-            renderTable();
-            form.reset();
+            try {
+                const response = await fetch(`${API_BASE}/${records[editIndex]._id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(newRec)
+                });
+
+                if (!response.ok) {
+                    const error = await response.json().catch(() => ({}));
+                    throw new Error(error.error || 'Failed to update record');
+                }
+
+                const updatedRecord = await response.json();
+                records[editIndex] = updatedRecord;
+                editIndex = null;
+                document.querySelector('.card-header h2').innerText = 'Add Vehicle Service Record';
+                showToast('Record updated!');
+                renderTable();
+                form.reset();
+                showSection('records');
+            } catch (err) {
+                console.error(err);
+                showToast(err.message || 'Error updating record');
+            }
             return;
         }
 
@@ -155,7 +175,7 @@ function editRecord(index) {
     document.getElementById('ownerName').value = r.owner || '';
     document.getElementById('mobile').value = r.mobile || '';
     document.getElementById('mileage').value = r.mileage || '';
-    document.getElementById('serviceDate').value = r.date || '';
+    document.getElementById('serviceDate').value = r.date ? new Date(r.date).toISOString().split('T')[0] : '';
     document.getElementById('parts').value = r.parts || '';
     editIndex = index;
     document.querySelector('.card-header h2').innerText = 'Edit Vehicle Service Record';
@@ -164,9 +184,7 @@ function editRecord(index) {
 
 async function deleteRecord(index) {
     const record = records[index];
-    if (!reco
-        
-        [-rd) return;
+    if (!record) return;
 
     try {
         const response = await fetch(`${API_BASE}/${record._id}`, {
@@ -191,7 +209,7 @@ async function deleteRecord(index) {
 
 
 function searchVehicle() {
- const regInput = document.getElementById('regNumber');
+    const regInput = document.getElementById('regNumber');
     const reg = regInput.value.trim();
 
     if (!reg) {
@@ -222,7 +240,7 @@ function saveVehicleInfo() {
     if (index !== -1) {
         // Update additional info
         records[index].addInfo = info;
-        renderTable();          
+        renderTable();
         showToast('Additional information saved');
 
     } else {
@@ -230,11 +248,11 @@ function saveVehicleInfo() {
     }
 }
 
-    function showToast(message) {
-        const toast = document.getElementById("toast");
-        toast.textContent = message;
-        toast.className = 'toast show ';
-        setTimeout(function () {
-            toast.className = 'toast';
-        }, 3000);
-    }
+function showToast(message) {
+    const toast = document.getElementById("toast");
+    toast.textContent = message;
+    toast.className = 'toast show ';
+    setTimeout(function () {
+        toast.className = 'toast';
+    }, 3000);
+}

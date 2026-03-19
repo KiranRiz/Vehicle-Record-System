@@ -54,6 +54,28 @@ router.post('/', async (req, res) => {
 
 module.exports = router;
 
+// Update  a record by ID
+router.put('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updateData = req.body;
+
+    const updatedRecord = await VehicleRecord.findByIdAndUpdate(
+      id,
+      updateData,
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedRecord) {
+      return res.status(404).json({ error: 'Record not found' });
+    }
+
+    res.json(updatedRecord);
+  } catch (err) {
+    console.error('Error updating record', err);
+    res.status(500).json({ error: 'Failed to update record' });
+  }
+});
 
 // DELETE a record by ID
 router.delete('/:id', async (req, res) => {
