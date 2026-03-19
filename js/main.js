@@ -162,10 +162,29 @@ function editRecord(index) {
     showSection('input');
 }
 
-function deleteRecord(index) {
-    records.splice(index, 1);
-    renderTable();
-    showToast('Record Deleted');
+async function deleteRecord(index) {
+    const record = records[index];
+    if (!reco
+        
+        [-rd) return;
+
+    try {
+        const response = await fetch(`${API_BASE}/${record._id}`, {
+            method: 'DELETE'
+        });
+
+        if (!response.ok) {
+            const error = await response.json().catch(() => ({}));
+            throw new Error(error.error || 'Failed to delete record');
+        }
+
+        records.splice(index, 1);
+        renderTable();
+        showToast('Record deleted successfully!');
+    } catch (err) {
+        console.error(err);
+        showToast(err.message || 'Error deleting record');
+    }
 }
 
 
