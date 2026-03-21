@@ -44,7 +44,10 @@ body {
     display: flex;
     gap: 30px;
     margin-top: 40px;
-
+    padding: 0 20px;
+    max-width: calc(100vw - 320px);
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .card {
@@ -69,7 +72,8 @@ body {
 }
 
 #input .container {
-    max-width: 100%;
+    width: calc(100vw - 320px);
+    max-width: calc(100vw - 320px);
     margin: 0 auto;
     padding: 10px;
 }
@@ -124,7 +128,8 @@ button[type="submit"] {
 }
 
 #records .container {
-    max-width: 1200px;
+    width: calc(100vw - 320px);
+    max-width: calc(100vw - 320px);
     margin: 0 auto;
     padding: 20px;
 }
@@ -148,7 +153,8 @@ th, td {
 }
 
 #vehicle .container {
-    max-width: 600px;
+    width: calc(100vw - 320px);
+    max-width: calc(100vw - 320px);
     margin: 0 auto;
     padding: 20px;
 }
@@ -199,4 +205,62 @@ th, td {
 .toast.show {
     visibility: visible;
     opacity: 1;
+}
+
+/* ===== User Management Section (full-width) ===== */
+#users .container,
+#userRecords .container {
+    width: calc(100vw - 320px);
+    max-width: calc(100vw - 320px);
+    margin: 0 auto;
+    padding: 10px;
+}
+
+#users .card,
+#userRecords .table-responsive {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+}
+
+#users .card {
+    max-width: 100%;
+    width: 100%;
+}
+
+#users .card {
+    text-align: left;
+}
+
+#users .card-header h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+#users .form-group {
+    margin-bottom: 10px;
+}
+
+#users .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: normal;
+}
+
+#users .form-group input{
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#users button[type="submit"] {
+    margin-top: 10px;
+    cursor: pointer;
+    border: none;
+    background-color: #7cacb7;
+    font-size: 16px;
+    width: 100%;
 }

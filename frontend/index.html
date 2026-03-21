@@ -16,6 +16,9 @@
         <a href="#" id="link-input" data-section="input">Input Data</a>
         <a href="#" id="link-records" data-section="records">View Records</a>
         <a href="#" id="link-vehicle" data-section="vehicle">Vehicle Information</a>
+        <a href="#" id="link-users" data-section="users">User Management</a>
+        <a href="#" id="link-userRecords" data-section="userRecords">User Records</a>
+
     </div>
 
 
@@ -124,7 +127,6 @@
                             </tr>
                         </thead>
                         <tbody id="recordsBody">
-                            <!-- data will be added in table using JS -->
                             <tr>
                                 <td colspan="9" style="text-align: center; color: #999;">No records found</td>
                             </tr>
@@ -139,11 +141,12 @@
 
 
 
-        <!-- for vehivle info -->
+        <!-- for vehicle info -->
         <section id="vehicle" class="section">
             <div class="container">
                 <h2>Vehicle Additional Information</h2>
-                <p class="info-text">Here you can add more information about the vehicle such as insurance details,service history, etc.</p>
+                <p class="info-text">Here you can add more information about the vehicle such as insurance
+                    details,service history, etc.</p>
 
                 <div class="form-group">
                     <label for="regNumber">Registration Number</label>
@@ -155,16 +158,93 @@
 
                 <div class="form-group">
                     <label for="additionalInfo">Additional Information</label>
-                    <textarea id="additionalInfo" rows="5"placeholder="Enter additional vehicle information here"></textarea>
+                    <textarea id="additionalInfo" rows="5"
+                        placeholder="Enter additional vehicle information here"></textarea>
                     <button class="save-btn" onclick="saveVehicleInfo()">Save Information</button>
                 </div>
             </div>
         </section>
 
+
+        <!-- User section -->
+        <section id="users" class="section">
+            <div class="container">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Add User Record</h2>
+                    </div>
+                    <div class="card-body">
+                        <form id="userForm" action="/api/records" method="POST">
+
+                            <div class="form-group">
+                                <label for="userName">User Name</label>
+                                <input type="text" id="userName" name="user" placeholder="e.g, John Doe">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="regNo">Registration No.</label>
+                                <input type="text" id="userRegNo" name="reg" placeholder="e.g., ABC12" required>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="mobile">Mobile No.</label>
+                                <input type="tel" id="userMobile" name="mobile" placeholder="e.g., 1234567890" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="assignDate">Vehicle Assignment Date</label>
+                                <input type="date" id="assignDate" name="assignDate" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="AssignvahicleReg">Assign Vehicle Reg.No</label>
+                                <input type="text" id="AssignvahicleReg" name="vehicleReg" placeholder="e.g., AB123"
+                                    required>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit">Add user</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- for user record section -->
+        <section id="userRecords" class="section">
+            <div class="container">
+                <h2>User record management </h2>
+                <div class="search-box">
+                    <input type="text" placeholder="Search records..." id="searchRecords">
+                </div>
+                <div class="table-responsive">
+                    <table id="userRecordTable">
+                        <thead>
+                            <tr>
+                                <th>User Name</th>
+                                <th>Registration No.</th>
+                                <th>Mobile No.</th>
+                                <th>Assignment Date</th>
+                                <th>Assigned Vehicle</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userRecordsBody">
+                            <tr>
+                                <td colspan="6" style="text-align: center; color: #999;">No records found</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+
+        <div id="toast" class="toast">Message</div>
+
     </div>
-
-
-    <div id="toast" class="toast">Message</div>
     <script src="../js/main.js"></script>
 </body>
 
