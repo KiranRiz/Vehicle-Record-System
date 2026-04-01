@@ -332,6 +332,63 @@ function setupUserForm() {
   });
 }
 
+async function editUser(userId) {
+  try {
+    const res = await fetch(`${USER_API}/${userId}`);
+    if (!res.ok) throw new Error('User not found');
+    const user = await res.json();
+
+    const newName = prompt('Edit User Name:', user.userName);
+    if (newName === null) return;
+    const newReg = prompt('Edit Registration No.:', user.userRegNo);
+    if (newReg === null) return;
+    const newMobile = prompt('Edit Mobile:', user.mobile);
+    if (newMobile === null) return;
+    const newDate = prompt('Edit Assignment Date (YYYY-MM-DD):', user.assignDate.substring(0,10));
+    if (newDate === null) return;
+    const newVehicle = prompt('Edit Assigned Vehicle Reg:', user.vehicleReg);
+    if (newVehicle === null) return;
+
+    const updateRes = await fetch(`${USER_API}/${userId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userName: newName,
+        userRegNo: newReg,
+        mobile: newMobile,
+        assignDate: newDate,
+        vehicleReg: newVehicle
+      })
+    });
+
+    if (updateRes.ok) {
+      showToast('User updated!');
+      loadUsers();
+    } else {
+      showToast('Failed to update user');
+    }
+  } catch (err) {
+    console.error(err);
+    showToast('Error editing user');
+  }
+}
+
+async function deleteUser(userId) {
+  if (!confirm('Are you sure you want to delete this user?')) return;
+  try {
+    const res = await fetch(`${USER_API}/${userId}`, { method: 'DELETE' });
+    if (res.ok) {
+      showToast('User deleted');
+      loadUsers();
+    } else {
+      showToast('Failed to delete user');
+    }
+  } catch (err) {
+    console.error(err);
+    showToast('Error deleting user');
+  }
+}
+
 
 function showToast(message) {
     const toast = document.getElementById("toast");
