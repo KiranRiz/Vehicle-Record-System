@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const recordsRouter = require('./routes/records');
+const usersRouter = require('./routes/users');
 
 const app = express();
 
@@ -10,6 +11,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // API routes
 app.use('/api/records', recordsRouter);
+app.use('/api/users', usersRouter);
+
 
 // Serve client assets
 const jsPath = path.join(__dirname, '../..', 'js');

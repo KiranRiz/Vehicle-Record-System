@@ -1,4 +1,5 @@
 const API_BASE = '/api/records';
+const USER_API = '/api/users';
 
 let records = [];
 let editIndex = null;
@@ -8,6 +9,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     setupNavigation();
     await loadRecords();
     setupForm();
+    awaitloadUsers();
+    setupUserForm();
 });
 
 function showSection(sectionId) {
@@ -247,6 +250,88 @@ function saveVehicleInfo() {
         showToast('No vehicle found with this registration number');
     }
 }
+
+
+async function loadUsers() {
+    try {
+        const res = await fetch(USER_API);
+        if (!res.ok) throw new Error('Failed to load users');
+        const users = await res.json();
+        renderUserTable(users);
+    } catch (err) {
+        console.error(err);
+        showToast('Unable to load users from server');
+    }
+}
+
+function renderUserTable(users) {
+    const tbody = document.getElementById('userRecordsBody');
+    if (!tbody) return;
+    if (users.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No records found</td></tr>';
+        return;
+    }
+    let html = '';
+    users.forEach((u, i) => {
+        html += `
+      <tr>
+        <td>${escapeHtml(u.userName)}</td>
+        <td>${escapeHtml(u.userRegNo)}</td>
+        <td>${escapeHtml(u.mobile)}</td>
+        <td>${new Date(u.assignDate).toLocaleDateString()}</td>
+        <td>${escapeHtml(u.vehicleReg)}</td>
+        <td>
+          <button onclick="editUser('${u._id}')">Edit</button>
+          <button onclick="deleteUser('${u._id}')">Delete</button>
+        </td>
+      </tr>
+    `;
+    });
+    tbody.innerHTML = html;
+}
+
+function setupUserForm() {
+  const form = document.getElementById('userForm');
+  if (!form) return;
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const userData = {
+      userName: document.getElementById('userName').value.trim(),
+      userRegNo: document.getElementById('userRegNo').value.trim(),
+      mobile: document.getElementById('userMobile').value.trim(),
+      assignDate: document.getElementById('assignDate').value,
+      vehicleReg: document.getElementById('AssignvahicleReg').value.trim()
+    };
+
+    if (!userData.userName || !userData.userRegNo || !userData.mobile || !userData.assignDate || !userData.vehicleReg) {
+      showToast('All fields are required!');
+      return;
+    }
+
+    try {
+      const res = await fetch(USER_API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData)
+      });
+
+      if (res.ok) {
+        showToast('User added successfully!');
+        form.reset();
+        loadUsers(); // Refresh table
+        showSection('userRecords'); // Show user records section
+      } else {
+        const error = await res.json().catch(() => ({}));
+        showToast(error.error || 'Failed to add user');
+      }
+    } catch (err) {
+      console.error(err);
+      showToast('Error adding user');
+    }
+  });
+}
+
 
 function showToast(message) {
     const toast = document.getElementById("toast");
