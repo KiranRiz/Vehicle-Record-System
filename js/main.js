@@ -1,10 +1,14 @@
 const API_BASE = '/api/records';
 const USER_API = '/api/users';
+const AGREEMENT_API = '/api/agreements';
+
 
 let records = [];
-let users = []; 
+let users = [];
 let editIndex = null;
 let editUserId = null;
+let agreements = [];
+let editAgreementId = null;
 
 document.addEventListener('DOMContentLoaded', async function () {
     showSection('home');
@@ -13,6 +17,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     setupForm();
     await loadUsers();
     setupUserForm();
+    await loadAgreements();
+    setupAgreementForm();
     setupSearch();
 });
 
@@ -166,7 +172,7 @@ function setupForm() {
             const created = await addRecord(newRec);
             records.unshift(created);
             showToast('Record added!');
-            updateVehicleDropdown(); 
+            updateVehicleDropdown();
             renderTable();
             form.reset();
             showSection('records');
@@ -345,8 +351,8 @@ function setupUserForm() {
 
             if (res.ok) {
                 form.reset();
-                await loadUsers();     
-                showSection('userRecords'); 
+                await loadUsers();
+                showSection('userRecords');
             } else {
                 const error = await res.json().catch(() => ({}));
                 showToast(error.error || 'Operation failed');
@@ -371,14 +377,14 @@ async function editUser(userId) {
         document.getElementById('assignDate').value = user.assignDate.substring(0, 10);
         document.getElementById('AssignvahicleReg').value = user.vehicleReg;
 
-       
+
         editUserId = userId;
         document.querySelector('#users .card-header h2').innerText = 'Edit User Record';
 
-        
+
         showSection('users');
 
-        
+
         const submitBtn = document.querySelector('#userForm button[type="submit"]');
         if (submitBtn) submitBtn.innerText = 'Update User';
     } catch (err) {
@@ -423,7 +429,7 @@ function setupSearch() {
     const setup = (searchId, tableId, colIndex = 1) => {
         const input = document.getElementById(searchId);
         if (!input) return;
-        input.addEventListener('keyup', function() {
+        input.addEventListener('keyup', function () {
             const term = this.value.trim().toLowerCase();
             const rows = document.querySelectorAll(`#${tableId} tbody tr`);
             rows.forEach(row => {
@@ -478,11 +484,49 @@ function exportToCSV(type) {
     });
 
     const csv = [customHeaders.join(','), ...rows].join('\n');
-    
+
     const blob = new Blob([csv], { type: 'text/csv' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.download = filename;
     link.click();
     URL.revokeObjectURL(link.href);
+}
+
+
+// Agreement related functions
+async function loadAgreements() {
+    try {
+        const res = await fetch('/api/agreements');
+        if (!res.ok) throw new Error('Failed to load');
+        agreements = await res.json();
+        renderAgreementTable();
+    } catch (err) {
+        showToast('Error loading agreements');
+    }
+}
+
+function renderAgreementTable() {
+    const tbody = document.getElementById('agreementListBody');
+    if (!tbody) return;
+    if (agreements.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5">No agreements found</td></tr>';
+        return;
+    }
+    let html = '';
+    agreements.forEach(ag => {
+        html += `
+      <tr>
+        <td>${new Date(ag.startDate).toLocaleDateString()}</td>
+        <td>${new Date(ag.endDate).toLocaleDateString()}</td>
+        <td>${ag.seatingCapacity}</td>
+        <td>${ag.fareType}</td>
+        <td>
+          <button onclick="editAgreement('${ag._id}')">Edit</button>
+          <button onclick="deleteAgreement('${ag._id}')">Delete</button>
+        </td>
+      </tr>
+    `;
+    });
+    tbody.innerHTML = html;
 }
