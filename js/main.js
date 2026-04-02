@@ -3,6 +3,7 @@ const USER_API = '/api/users';
 
 let records = [];
 let editIndex = null;
+let editUserId = null;
 
 document.addEventListener('DOMContentLoaded', async function () {
     showSection('home');
@@ -292,102 +293,108 @@ function renderUserTable(users) {
 
 
 function setupUserForm() {
-  const form = document.getElementById('userForm');
-  if (!form) return;
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
+    const form = document.getElementById('userForm');
+    if (!form) return;
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
 
-    const userData = {
-      userName: document.getElementById('userName').value.trim(),
-      userRegNo: document.getElementById('userRegNo').value.trim(),
-      mobile: document.getElementById('userMobile').value.trim(),
-      assignDate: document.getElementById('assignDate').value,
-      vehicleReg: document.getElementById('AssignvahicleReg').value.trim()
-    };
+        const userData = {
+            userName: document.getElementById('userName').value.trim(),
+            userRegNo: document.getElementById('userRegNo').value.trim(),
+            mobile: document.getElementById('userMobile').value.trim(),
+            assignDate: document.getElementById('assignDate').value,
+            vehicleReg: document.getElementById('AssignvahicleReg').value.trim()
+        };
 
-    if (!userData.userName || !userData.userRegNo || !userData.mobile || !userData.assignDate || !userData.vehicleReg) {
-      showToast('All fields are required!');
-      return;
-    }
+        if (!userData.userName || !userData.userRegNo || !userData.mobile || !userData.assignDate || !userData.vehicleReg) {
+            showToast('All fields are required!');
+            return;
+        }
 
-    try {
-      const res = await fetch(USER_API, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(userData)
-      });
+        try {
+            let res;
+            if (editUserId !== null) {
+                // UPDATE existing user
+                res = await fetch(`${USER_API}/${editUserId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(userData)
+                });
+                if (res.ok) {
+                    showToast('User updated successfully!');
+                    editUserId = null;
+                    // Reset form header and button text
+                    document.querySelector('#users .card-header h2').innerText = 'Add User Record';
+                    const submitBtn = document.querySelector('#userForm button[type="submit"]');
+                    if (submitBtn) submitBtn.innerText = 'Add user';
+                }
+            } else {
+                // CREATE new user
+                res = await fetch(USER_API, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(userData)
+                });
+                if (res.ok) showToast('User added successfully!');
+            }
 
-      if (res.ok) {
-        showToast('User added successfully!');
-        form.reset();
-        loadUsers(); // Refresh table
-        showSection('userRecords'); // Show user records section
-      } else {
-        const error = await res.json().catch(() => ({}));
-        showToast(error.error || 'Failed to add user');
-      }
-    } catch (err) {
-      console.error(err);
-      showToast('Error adding user');
-    }
-  });
+            if (res.ok) {
+                form.reset();
+                await loadUsers();      // refresh table
+                showSection('userRecords');  // go to records view
+            } else {
+                const error = await res.json().catch(() => ({}));
+                showToast(error.error || 'Operation failed');
+            }
+        } catch (err) {
+            console.error(err);
+            showToast('Error saving user');
+        }
+    });
 }
 
 async function editUser(userId) {
-  try {
-    const res = await fetch(`${USER_API}/${userId}`);
-    if (!res.ok) throw new Error('User not found');
-    const user = await res.json();
+    try {
+        const res = await fetch(`${USER_API}/${userId}`);
+        if (!res.ok) throw new Error('User not found');
+        const user = await res.json();
 
-    const newName = prompt('Edit User Name:', user.userName);
-    if (newName === null) return;
-    const newReg = prompt('Edit Registration No.:', user.userRegNo);
-    if (newReg === null) return;
-    const newMobile = prompt('Edit Mobile:', user.mobile);
-    if (newMobile === null) return;
-    const newDate = prompt('Edit Assignment Date (YYYY-MM-DD):', user.assignDate.substring(0,10));
-    if (newDate === null) return;
-    const newVehicle = prompt('Edit Assigned Vehicle Reg:', user.vehicleReg);
-    if (newVehicle === null) return;
+        // Populate the user form
+        document.getElementById('userName').value = user.userName;
+        document.getElementById('userRegNo').value = user.userRegNo;
+        document.getElementById('userMobile').value = user.mobile;
+        document.getElementById('assignDate').value = user.assignDate.substring(0, 10);
+        document.getElementById('AssignvahicleReg').value = user.vehicleReg;
 
-    const updateRes = await fetch(`${USER_API}/${userId}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        userName: newName,
-        userRegNo: newReg,
-        mobile: newMobile,
-        assignDate: newDate,
-        vehicleReg: newVehicle
-      })
-    });
+        // Set edit mode
+        editUserId = userId;
+        document.querySelector('#users .card-header h2').innerText = 'Edit User Record';
 
-    if (updateRes.ok) {
-      showToast('User updated!');
-      loadUsers();
-    } else {
-      showToast('Failed to update user');
+        // Show the user form section
+        showSection('users');
+
+        // Optionally change button text (optional, but nice)
+        const submitBtn = document.querySelector('#userForm button[type="submit"]');
+        if (submitBtn) submitBtn.innerText = 'Update User';
+    } catch (err) {
+        console.error(err);
+        showToast('Error loading user data');
     }
-  } catch (err) {
-    console.error(err);
-    showToast('Error editing user');
-  }
 }
 
 async function deleteUser(userId) {
-  if (!confirm('Are you sure you want to delete this user?')) return;
-  try {
-    const res = await fetch(`${USER_API}/${userId}`, { method: 'DELETE' });
-    if (res.ok) {
-      showToast('User deleted');
-      loadUsers();
-    } else {
-      showToast('Failed to delete user');
+    try {
+        const res = await fetch(`${USER_API}/${userId}`, { method: 'DELETE' });
+        if (res.ok) {
+            showToast('User deleted');
+            loadUsers();
+        } else {
+            showToast('Failed to delete user');
+        }
+    } catch (err) {
+        console.error(err);
+        showToast('Error deleting user');
     }
-  } catch (err) {
-    console.error(err);
-    showToast('Error deleting user');
-  }
 }
 
 
