@@ -98,7 +98,8 @@ section {
 }
 
 .form-group input,
-.form-group textarea {
+.form-group textarea,
+.form-group select {
     width: 100%;
     padding: 8px;
     border: 1px solid #ccc;
@@ -269,4 +270,98 @@ th, td {
 
 .highlight-row {
     background-color: #d0d0b6 !important; 
+}
+
+#agreements .container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+#fareTypes .container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+#agreements .card {
+    width: 100%;
+    text-align: left;
+}
+
+#fareTypes .card {
+    width: 100%;
+    text-align: left;
+}
+
+#agreements h2,
+#agreements .card-header h2 {
+    text-align: left;
+}
+
+#fareTypes h2,
+#fareTypes .card-header h2 {
+    text-align: left;
+}
+
+#agreements .form-row {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(140px, 1fr));
+    gap: 12px;
+    align-items: end;
+}
+
+#fareTypes .form-row {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(140px, 1fr));
+    gap: 12px;
+    align-items: end;
+}
+
+#agreements .form-row .form-group {
+    margin-bottom: 0;
+}
+
+#fareTypes .form-row .form-group {
+    margin-bottom: 0;
+}
+
+#agreements .form-row label {
+    text-align: left;
+}
+
+#fareTypes .form-row label {
+    text-align: left;
+}
+
+#agreements #agreementSubmitBtn {
+    margin-top: 0;
+    width: 100%;
+}
+
+#fareTypes #fareTypeSubmitBtn {
+    margin-top: 0;
+    width: 100%;
+}
+
+@media (max-width: 1100px) {
+    #agreements .form-row {
+        grid-template-columns: repeat(2, minmax(140px, 1fr));
+    }
+
+    #fareTypes .form-row {
+        grid-template-columns: repeat(2, minmax(140px, 1fr));
+    }
+}
+
+#agreements .empty-agreement {
+    text-align: center;
+    color: #999;
+}
+
+#fareTypes .empty-faretype {
+    text-align: center;
+    color: #999;
 }

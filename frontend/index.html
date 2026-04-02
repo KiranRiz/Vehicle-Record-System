@@ -18,6 +18,8 @@
         <a href="#" id="link-vehicle" data-section="vehicle">Vehicle Information</a>
         <a href="#" id="link-users" data-section="users">User Management</a>
         <a href="#" id="link-userRecords" data-section="userRecords">User Records</a>
+        <a href="#" id="link-agreements" data-section="agreements">Agreements</a>
+        <a href="#" id="link-fareTypes" data-section="fareTypes">Fare Types</a>
 
     </div>
 
@@ -61,27 +63,33 @@
 
                             <div class="form-group">
                                 <label for="vehicleName">Vehicle Name</label>
-                                <input type="text" id="vehicleName" name="vehicle" placeholder="e.g, Toyota Camry">
+                                <input type="text" id="vehicleName" name="vehicle" placeholder="e.g, Toyota Camry"
+                                    minlength="2">
                             </div>
 
                             <div class="form-group">
                                 <label for="regNo">Registration No.</label>
-                                <input type="text" id="regNo" name="reg" placeholder="e.g., ABC12" required>
+                                <input type="text" id="regNo" name="reg" placeholder="e.g., ABC12" required
+                                    pattern="[A-Za-z0-9]+">
                             </div>
 
                             <div class="form-group">
                                 <label for="ownerName">Owner Name</label>
-                                <input type="text" id="ownerName" name="owner" placeholder="e.g., John Doe" required>
+                                <input type="text" id="ownerName" name="owner" placeholder="e.g., John Doe" required
+                                    minlength="2" pattern="[A-Za-z\s]+"
+                                    title="Please enter a valid name (letters and spaces only)">
                             </div>
 
                             <div class="form-group">
                                 <label for="mobile">Mobile No.</label>
-                                <input type="tel" id="mobile" name="mobile" placeholder="e.g., 1234567890" required>
+                                <input type="tel" id="mobile" name="mobile" placeholder="e.g., 1234567890" required
+                                    pattern="\d{10,11}" title="Please enter a valid mobile number (10-11 digits)">
                             </div>
 
                             <div class="form-group">
                                 <label for="mileage">Mileage (km)</label>
-                                <input type="number" id="mileage" name="mileage" placeholder="Enter mileage" required>
+                                <input type="number" id="mileage" name="mileage" placeholder="Enter mileage" required
+                                    min="0" step="1">
                             </div>
 
                             <div class="form-group">
@@ -111,6 +119,7 @@
                 <div class="search-box">
                     <input type="text" placeholder="Search records..." id="searchServiceRecords">
                 </div>
+                <button onclick="exportToCSV('records')">Export to CSV</button>
                 <div class="table-responsive">
                     <table id="recordsTable">
                         <thead>
@@ -178,18 +187,23 @@
 
                             <div class="form-group">
                                 <label for="userName">User Name</label>
-                                <input type="text" id="userName" name="user" placeholder="e.g, John Doe">
+                                <input type="text" id="userName" name="user" placeholder="e.g, John Doe" required
+                                    minlength="2" pattern="[A-Za-z\s]+"
+                                    title="Please enter a valid name (letters and spaces only)">
                             </div>
 
                             <div class="form-group">
                                 <label for="regNo">Registration No.</label>
-                                <input type="text" id="userRegNo" name="reg" placeholder="e.g., ABC12" required>
+                                <input type="text" id="userRegNo" name="reg" placeholder="e.g., ABC12" required
+                                    pattern="[A-Za-z0-9]+"
+                                    title="Please enter a valid registration number (letters and numbers only)">
                             </div>
 
 
                             <div class="form-group">
                                 <label for="mobile">Mobile No.</label>
-                                <input type="tel" id="userMobile" name="mobile" placeholder="e.g., 1234567890" required>
+                                <input type="tel" id="userMobile" name="mobile" placeholder="e.g., 1234567890" required
+                                    pattern="\d{10,11}" title="Please enter a valid mobile number (10-11 digits)">
                             </div>
 
                             <div class="form-group">
@@ -200,7 +214,7 @@
                             <div class="form-group">
                                 <label for="AssignvahicleReg">Assign Vehicle Reg.No</label>
                                 <select id="AssignvahicleReg" name="vehicleReg" required>
-                                    <option value="">  Select a vehicle  </option>
+                                    <option value=""> Select a vehicle </option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -220,6 +234,7 @@
                 <div class="search-box">
                     <input type="text" placeholder="Search records..." id="searchUserRecords">
                 </div>
+                <button onclick="exportToCSV('users')">Export to CSV</button>
                 <div class="table-responsive">
                     <table id="userRecordTable">
                         <thead>
@@ -242,6 +257,129 @@
             </div>
         </section>
 
+        <section id="agreements" class="section">
+            <div class="container">
+                <h2>Manage Agreements</h2>
+                <div class="card">
+                    <div class="card-header">
+                        <h2 id="agreementFormTitle">Add Agreement</h2>
+                    </div>
+                    <div class="card-body">
+                        <form id="agreementForm" class="inline-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Start Date</label>
+                                    <input type="date" id="startDate" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>End Date</label>
+                                    <input type="date" id="endDate" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Seating Capacity</label>
+                                    <input type="number" id="seatingCapacity" min="1" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Fare Type</label>
+                                    <select id="fareType" required>
+                                        <option value="">-- Select --</option>
+                                        <option value="Fixed">Fixed</option>
+                                        <option value="Metered">Metered</option>
+                                        <option value="Per KM">Per KM</option>
+                                        <option value="Hourly">Hourly</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" id="agreementSubmitBtn">Save Agreement</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <h2>Agreement List</h2>
+                <div class="table-responsive">
+                    <table id="agreementTable">
+                        <thead>
+                            <tr>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Seating Capacity</th>
+                                <th>Fare Type</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="agreementListBody">
+                            <tr>
+                                <td colspan="5" class="empty-agreement">No agreements found</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="fareTypes" class="section">
+            <div class="container">
+                <h2>Manage Fare Types</h2>
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Add Fare Type</h2>
+                    </div>
+                    <div class="card-body">
+                        <form id="fareTypeForm" class="inline-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="fareName">Fare Name</label>
+                                    <input type="text" id="fareName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="fareDay">Fare Day</label>
+                                    <select id="fareDay" required>
+                                        <option value="">-- Select --</option>
+                                        <option value="Weekend Fare">Weekend Fare</option>
+                                        <option value="Special Holiday Fare">Special Holiday Fare</option>
+                                        <option value="Normal Day Fare">Normal Day Fare</option>
+                                        <option value="Minimum Fare">Minimum Fare</option>
+                                        <option value="Maximum Fare">Maximum Fare</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="minimumFare">Minimum Fare</label>
+                                    <input type="number" id="minimumFare" min="0" step="0.01" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="maximumFare">Maximum Fare</label>
+                                    <input type="number" id="maximumFare" min="0" step="0.01" required>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" id="fareTypeSubmitBtn">Save Fare Type</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <h2>Fare Type List</h2>
+                <div class="table-responsive">
+                    <table id="fareTypeTable">
+                        <thead>
+                            <tr>
+                                <th>Fare Name</th>
+                                <th>Fare Day</th>
+                                <th>Minimum Fare</th>
+                                <th>Maximum Fare</th>
+                            </tr>
+                        </thead>
+                        <tbody id="fareTypeListBody">
+                            <tr>
+                                <td colspan="4" class="empty-faretype">No fare types found</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
 
         <div id="toast" class="toast">Message</div>
 

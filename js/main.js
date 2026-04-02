@@ -2,6 +2,7 @@ const API_BASE = '/api/records';
 const USER_API = '/api/users';
 
 let records = [];
+let users = []; 
 let editIndex = null;
 let editUserId = null;
 
@@ -260,8 +261,8 @@ function saveVehicleInfo() {
 async function loadUsers() {
     try {
         const res = await fetch(USER_API);
+        users = await res.json();
         if (!res.ok) throw new Error('Failed to load users');
-        const users = await res.json();
         renderUserTable(users);
     } catch (err) {
         console.error(err);
@@ -363,7 +364,7 @@ async function editUser(userId) {
         if (!res.ok) throw new Error('User not found');
         const user = await res.json();
 
-   
+        // Populate the user form
         document.getElementById('userName').value = user.userName;
         document.getElementById('userRegNo').value = user.userRegNo;
         document.getElementById('userMobile').value = user.mobile;
@@ -445,4 +446,43 @@ function showToast(message) {
     setTimeout(function () {
         toast.className = 'toast';
     }, 3000);
+}
+
+function exportToCSV(type) {
+    let data, filename, customHeaders, fieldMapping;
+
+    if (type === 'records') {
+        data = records;
+        filename = 'service_records.csv';
+        // Custom headings aur mapping
+        customHeaders = ['Vehicle Name', 'Registration No.', 'Owner Name', 'Mobile No.', 'Mileage (km)', 'Service Date', 'Parts Changed', 'Additional Info'];
+        fieldMapping = ['vehicle', 'reg', 'owner', 'mobile', 'mileage', 'date', 'parts', 'addInfo'];
+    } else {
+        data = users;
+        filename = 'user_records.csv';
+        customHeaders = ['User Name', 'Registration No.', 'Mobile No.', 'Assignment Date', 'Assigned Vehicle'];
+        fieldMapping = ['userName', 'userRegNo', 'mobile', 'assignDate', 'vehicleReg'];
+    }
+
+    if (!data.length) return showToast('No data to export');
+
+    // Rows banao mapping ke hisaab se
+    const rows = data.map(row => {
+        return fieldMapping.map(field => {
+            let value = row[field];
+            if (field === 'date' || field === 'assignDate') {
+                value = value ? new Date(value).toLocaleDateString() : '';
+            }
+            return `"${value || ''}"`;
+        }).join(',');
+    });
+
+    const csv = [customHeaders.join(','), ...rows].join('\n');
+    
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    link.click();
+    URL.revokeObjectURL(link.href);
 }
