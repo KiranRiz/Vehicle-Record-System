@@ -109,7 +109,7 @@
             <div class="container">
                 <h2>Service Records</h2>
                 <div class="search-box">
-                    <input type="text" placeholder="Search records..." id="searchRecords">
+                    <input type="text" placeholder="Search records..." id="searchServiceRecords">
                 </div>
                 <div class="table-responsive">
                     <table id="recordsTable">
@@ -199,8 +199,9 @@
 
                             <div class="form-group">
                                 <label for="AssignvahicleReg">Assign Vehicle Reg.No</label>
-                                <input type="text" id="AssignvahicleReg" name="vehicleReg" placeholder="e.g., AB123"
-                                    required>
+                                <select id="AssignvahicleReg" name="vehicleReg" required>
+                                    <option value="">  Select a vehicle  </option>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <button type="submit">Add user</button>
@@ -217,7 +218,7 @@
             <div class="container">
                 <h2>User record management </h2>
                 <div class="search-box">
-                    <input type="text" placeholder="Search records..." id="searchRecords">
+                    <input type="text" placeholder="Search records..." id="searchUserRecords">
                 </div>
                 <div class="table-responsive">
                     <table id="userRecordTable">

@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     setupForm();
     await loadUsers();
     setupUserForm();
+    setupSearch();
 });
 
 function showSection(sectionId) {
@@ -85,6 +86,7 @@ async function loadRecords() {
         showToast('Unable to load records from server');
     }
     renderTable();
+    updateVehicleDropdown();
 }
 
 async function addRecord(record) {
@@ -148,6 +150,7 @@ function setupForm() {
                 editIndex = null;
                 document.querySelector('.card-header h2').innerText = 'Add Vehicle Service Record';
                 showToast('Record updated!');
+                updateVehicleDropdown();
                 renderTable();
                 form.reset();
                 showSection('records');
@@ -162,6 +165,7 @@ function setupForm() {
             const created = await addRecord(newRec);
             records.unshift(created);
             showToast('Record added!');
+            updateVehicleDropdown(); 
             renderTable();
             form.reset();
             showSection('records');
@@ -340,8 +344,8 @@ function setupUserForm() {
 
             if (res.ok) {
                 form.reset();
-                await loadUsers();      // refresh table
-                showSection('userRecords');  // go to records view
+                await loadUsers();     
+                showSection('userRecords'); 
             } else {
                 const error = await res.json().catch(() => ({}));
                 showToast(error.error || 'Operation failed');
@@ -359,21 +363,21 @@ async function editUser(userId) {
         if (!res.ok) throw new Error('User not found');
         const user = await res.json();
 
-        // Populate the user form
+   
         document.getElementById('userName').value = user.userName;
         document.getElementById('userRegNo').value = user.userRegNo;
         document.getElementById('userMobile').value = user.mobile;
         document.getElementById('assignDate').value = user.assignDate.substring(0, 10);
         document.getElementById('AssignvahicleReg').value = user.vehicleReg;
 
-        // Set edit mode
+       
         editUserId = userId;
         document.querySelector('#users .card-header h2').innerText = 'Edit User Record';
 
-        // Show the user form section
+        
         showSection('users');
 
-        // Optionally change button text (optional, but nice)
+        
         const submitBtn = document.querySelector('#userForm button[type="submit"]');
         if (submitBtn) submitBtn.innerText = 'Update User';
     } catch (err) {
@@ -395,6 +399,42 @@ async function deleteUser(userId) {
         console.error(err);
         showToast('Error deleting user');
     }
+}
+
+function updateVehicleDropdown() {
+    const selectBox = document.getElementById('AssignvahicleReg');
+    if (!selectBox) return;
+
+    selectBox.innerHTML = '<option value="">-- Select a vehicle --</option>';
+
+    const allRegs = records.map(r => r.reg);
+    const uniqueRegs = [...new Set(allRegs)];
+
+    uniqueRegs.forEach(reg => {
+        const option = document.createElement('option');
+        option.value = reg;
+        option.textContent = reg;
+        selectBox.appendChild(option);
+    });
+}
+
+function setupSearch() {
+    const setup = (searchId, tableId, colIndex = 1) => {
+        const input = document.getElementById(searchId);
+        if (!input) return;
+        input.addEventListener('keyup', function() {
+            const term = this.value.trim().toLowerCase();
+            const rows = document.querySelectorAll(`#${tableId} tbody tr`);
+            rows.forEach(row => {
+                const cell = row.cells[colIndex];
+                const match = cell && cell.textContent.toLowerCase().includes(term);
+                row.style.display = (!term || match) ? '' : 'none';
+                row.classList.toggle('highlight-row', match && term !== '');
+            });
+        });
+    };
+    setup('searchServiceRecords', 'recordsTable');
+    setup('searchUserRecords', 'userRecordTable');
 }
 
 
