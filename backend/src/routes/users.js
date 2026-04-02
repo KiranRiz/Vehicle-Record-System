@@ -39,6 +39,21 @@ router.post('/', async (req, res) => {
   }
 });
 
+// GET single user by ID
+router.get('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    res.json(user);
+  } catch (err) {
+    console.error('Error fetching user', err);
+    res.status(500).json({ error: 'Failed to fetch user' });
+  }
+});
+
 // PUT update a user by ID
 router.put('/:id', async (req, res) => {
   try {

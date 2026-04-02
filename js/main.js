@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     setupNavigation();
     await loadRecords();
     setupForm();
-    awaitloadUsers();
+    await loadUsers();
     setupUserForm();
 });
 
@@ -275,11 +275,11 @@ function renderUserTable(users) {
     users.forEach((u, i) => {
         html += `
       <tr>
-        <td>${escapeHtml(u.userName)}</td>
-        <td>${escapeHtml(u.userRegNo)}</td>
-        <td>${escapeHtml(u.mobile)}</td>
+        <td>${u.userName}</td>
+        <td>${u.userRegNo}</td>
+        <td>${u.mobile}</td>
         <td>${new Date(u.assignDate).toLocaleDateString()}</td>
-        <td>${escapeHtml(u.vehicleReg)}</td>
+        <td>${u.vehicleReg}</td>
         <td>
           <button onclick="editUser('${u._id}')">Edit</button>
           <button onclick="deleteUser('${u._id}')">Delete</button>
@@ -289,6 +289,7 @@ function renderUserTable(users) {
     });
     tbody.innerHTML = html;
 }
+
 
 function setupUserForm() {
   const form = document.getElementById('userForm');
