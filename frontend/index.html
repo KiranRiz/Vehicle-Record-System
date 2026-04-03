@@ -166,9 +166,16 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="agreementSelect">Attach Agreement</label>
+                    <select id="agreementSelect">
+                        <option value="">-- Select Agreement --</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
                     <label for="additionalInfo">Additional Information</label>
                     <textarea id="additionalInfo" rows="5"
-                        placeholder="Enter additional vehicle information here"></textarea>
+                        placeholder="Enter additional informative status (Pending, Completed, etc)"></textarea>
                     <button class="save-btn" onclick="saveVehicleInfo()">Save Information</button>
                 </div>
             </div>
@@ -364,7 +371,7 @@
                                 <th>Fare Type</th>
                                 <th>Minimum Fare</th>
                                 <th>Maximum Fare</th>
-                                <th>Actions</th>   
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody id="fareTypeListBody">

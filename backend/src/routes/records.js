@@ -6,8 +6,12 @@ const router = express.Router();
 // Get all records
 router.get('/', async (req, res) => {
   try {
-    const records = await VehicleRecord.find().sort({ createdAt: -1 });
-    res.json(records);
+    const records = await VehicleRecord.find().sort({ createdAt: -1 }).lean();
+    const normalized = records.map((record) => ({
+      ...record,
+      agreementName: typeof record.agreementName === 'string' ? record.agreementName : '',
+    }));
+    res.json(normalized);
   } catch (err) {
     console.error('Error fetching records', err);
     res.status(500).json({ error: 'Failed to fetch records' });
@@ -26,6 +30,7 @@ router.post('/', async (req, res) => {
       parts = '',
       date = '',
       addInfo = '',
+      agreementName = '',
     } = req.body;
 
     if (!reg) {
@@ -41,6 +46,7 @@ router.post('/', async (req, res) => {
       parts,
       date: date ? new Date(date) : undefined,
       addInfo,
+      agreementName: String(agreementName || '').trim(),
     });
 
     await record.save();
@@ -52,28 +58,22 @@ router.post('/', async (req, res) => {
   }
 });
 
-module.exports = router;
-
-// Update  a record by ID
 router.put('/:id', async (req, res) => {
   try {
-    const { id } = req.params;
-    const updateData = req.body;
+    const { addInfo, agreementName } = req.body;
+    const update = {};
+    if (addInfo !== undefined) update.addInfo = addInfo;
+    if (agreementName !== undefined) update.agreementName = agreementName;
 
-    const updatedRecord = await VehicleRecord.findByIdAndUpdate(
-      id,
-      updateData,
-      { new: true, runValidators: true }
+    const updated = await VehicleRecord.findByIdAndUpdate(
+      req.params.id,
+      { $set: update },
+      { new: true, runValidators: false }
     );
-
-    if (!updatedRecord) {
-      return res.status(404).json({ error: 'Record not found' });
-    }
-
-    res.json(updatedRecord);
+    if (!updated) return res.status(404).json({ error: 'Record not found' });
+    res.json(updated);
   } catch (err) {
-    console.error('Error updating record', err);
-    res.status(500).json({ error: 'Failed to update record' });
+    res.status(500).json({ error: err.message });
   }
 });
 
@@ -94,3 +94,4 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+module.exports = router;

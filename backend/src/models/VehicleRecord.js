@@ -10,6 +10,7 @@ const vehicleRecordSchema = new Schema(
     parts: { type: String, default: '' },
     date: { type: Date, default: Date.now },
     addInfo: { type: String, default: '' },
+    agreementName: { type: String, default: '' }
   },
   {
     timestamps: true,
@@ -17,3 +18,14 @@ const vehicleRecordSchema = new Schema(
 );
 
 module.exports = model('VehicleRecord', vehicleRecordSchema);
+
+
+
+
+
+
+
+
+
+
+

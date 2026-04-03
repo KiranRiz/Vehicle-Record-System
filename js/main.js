@@ -72,6 +72,7 @@ function renderTable() {
     }
     let html = '';
     records.forEach((r, i) => {
+
         html += `<tr>
             <td>${r.vehicle || ''}</td>
             <td>${r.reg || ''}</td>
@@ -80,7 +81,13 @@ function renderTable() {
             <td>${r.mileage || ''}</td>
             <td>${r.date ? new Date(r.date).toLocaleDateString() : ''}</td>
             <td>${r.parts || ''}</td>
-            <td>${r.addInfo || ''}</td>
+            <td>
+                ${r.agreementName ? `<span style="background:green; color:white; padding:2px 8px; border-radius:20px;"> ${r.agreementName}</span><br>` : ''}
+                ${r.addInfo || ''}
+           </td>
+            
+
+
             <td>
                 <button onclick="editRecord(${i})">Edit</button>
                 <button onclick="deleteRecord(${i})">Delete</button>
@@ -248,28 +255,52 @@ function searchVehicle() {
     }
 }
 
-function saveVehicleInfo() {
-    const regInput = document.getElementById('regNumber');
-    const infoTextarea = document.getElementById('additionalInfo');
-    const reg = regInput.value.trim();
-    const info = infoTextarea.value.trim();
+async function saveVehicleInfo() {
+    const reg = document.getElementById('regNumber').value.trim();
+    const info = document.getElementById('additionalInfo').value.trim();
+    const agreementName = document.getElementById('agreementSelect').value;
 
     if (!reg) {
         showToast('Please enter a registration number');
         return;
     }
-    const index = records.findIndex(r => r.reg.toLowerCase() === reg.toLowerCase());
-    if (index !== -1) {
-        // Update additional info
-        records[index].addInfo = info;
-        renderTable();
-        showToast('Additional information saved');
 
-    } else {
-        showToast('No vehicle found with this registration number');
+    const record = records.find(r => r.reg.toLowerCase() === reg.toLowerCase());
+    if (!record) {
+        showToast('No vehicle found');
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_BASE}/${record._id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                addInfo: info,
+                agreementName: agreementName
+            })
+        });
+
+        if (response.ok) {
+            const updated = await response.json();
+            // Update local array with server response
+            const index = records.findIndex(r => r._id === updated._id);
+            if (index !== -1) {
+                records[index] = updated;
+            }
+            renderTable();
+            showToast('Information saved successfully');
+            // Clear form fields
+            document.getElementById('additionalInfo').value = '';
+            document.getElementById('agreementSelect').value = '';
+        } else {
+            showToast('Save failed');
+        }
+    } catch (err) {
+        console.error(err);
+        showToast('Error saving information');
     }
 }
-
 
 async function loadUsers() {
     try {
@@ -508,9 +539,22 @@ async function loadAgreements() {
         if (!res.ok) throw new Error('Failed to load');
         agreements = await res.json();
         renderAgreementTable();
+        populateAgreementDropdown();
     } catch (err) {
         showToast('Error loading agreements');
     }
+}
+
+function populateAgreementDropdown() {
+    const select = document.getElementById('agreementSelect');
+    if (!select) return;
+    select.innerHTML = '<option value="">-- Select Agreement --</option>';
+    agreements.forEach(ag => {
+        const option = document.createElement('option');
+        option.value = ag.agreementName;
+        option.textContent = ag.agreementName;
+        select.appendChild(option);
+    });
 }
 
 function renderAgreementTable() {
