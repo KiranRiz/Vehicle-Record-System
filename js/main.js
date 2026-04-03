@@ -1,6 +1,7 @@
 const API_BASE = '/api/records';
 const USER_API = '/api/users';
 const AGREEMENT_API = '/api/agreements';
+const FARE_TYPE_API = '/api/fareTypes';
 
 
 let records = [];
@@ -9,6 +10,10 @@ let editIndex = null;
 let editUserId = null;
 let agreements = [];
 let editAgreementId = null;
+let fareTypes = [];
+let editFareTypeId = null;
+
+
 
 document.addEventListener('DOMContentLoaded', async function () {
     showSection('home');
@@ -19,6 +24,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     setupUserForm();
     await loadAgreements();
     setupAgreementForm();
+    await loadFareTypes();
+    setupFareTypeForm();
     setupSearch();
 });
 
@@ -529,4 +536,201 @@ function renderAgreementTable() {
     `;
     });
     tbody.innerHTML = html;
+}
+
+
+function setupAgreementForm() {
+    const form = document.getElementById('agreementForm');
+    if (!form) return;
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const agreementData = {
+            startDate: document.getElementById('startDate').value,
+            endDate: document.getElementById('endDate').value,
+            seatingCapacity: parseInt(document.getElementById('seatingCapacity').value),
+            fareType: document.getElementById('fareType').value
+        };
+        if (!agreementData.startDate || !agreementData.endDate || !agreementData.seatingCapacity || !agreementData.fareType) {
+            showToast('All fields required');
+            return;
+        }
+        try {
+            let res;
+            if (editAgreementId) {
+                res = await fetch(`/api/agreements/${editAgreementId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(agreementData)
+                });
+                if (res.ok) {
+                    showToast('Agreement updated');
+                    editAgreementId = null;
+                    document.getElementById('agreementFormTitle').innerText = 'Add Agreement';
+                    document.getElementById('agreementSubmitBtn').innerText = 'Save Agreement';
+                }
+            } else {
+                res = await fetch('/api/agreements', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(agreementData)
+                });
+                if (res.ok) showToast('Agreement added');
+            }
+            if (res.ok) {
+                form.reset();
+                await loadAgreements();
+                showSection('agreements');
+            } else {
+                const err = await res.json();
+                showToast(err.error || 'Operation failed');
+            }
+        } catch (err) {
+            showToast('Error saving agreement');
+        }
+    });
+}
+
+async function editAgreement(id) {
+    const agreement = agreements.find(a => a._id === id);
+    if (!agreement) return;
+    document.getElementById('startDate').value = agreement.startDate.substring(0, 10);
+    document.getElementById('endDate').value = agreement.endDate.substring(0, 10);
+    document.getElementById('seatingCapacity').value = agreement.seatingCapacity;
+    document.getElementById('fareType').value = agreement.fareType;
+    editAgreementId = id;
+    document.getElementById('agreementFormTitle').innerText = 'Edit Agreement';
+    document.getElementById('agreementSubmitBtn').innerText = 'Update Agreement';
+    showSection('agreements');
+}
+
+async function deleteAgreement(id) {
+    try {
+        const res = await fetch(`/api/agreements/${id}`, { method: 'DELETE' });
+        if (res.ok) {
+            showToast('Agreement deleted');
+            await loadAgreements();
+        } else {
+            showToast('Delete failed');
+        }
+    } catch (err) {
+        showToast('Error deleting');
+    }
+}
+
+
+// Fare Type related functions
+async function loadFareTypes() {
+    try {
+        const res = await fetch('/api/fareTypes');   
+        if (!res.ok) throw new Error('Failed to load');
+        fareTypes = await res.json();
+        renderFareTypeTable();
+    } catch (err) {
+        showToast('Error loading fare types');
+    }
+}
+
+function renderFareTypeTable() {
+    const tbody = document.getElementById('fareTypeListBody');
+    if (!tbody) return;
+    if (!fareTypes.length) {
+        tbody.innerHTML = '<tr><td colspan="5">No fare types found</td></tr>';
+        return;
+    }
+    let html = '';
+    fareTypes.forEach(ft => {
+        html += `
+            <tr>
+                <td>${ft.fareName}</td>
+                <td>${ft.fareType}</td>
+                <td>${ft.minimumFare}</td>
+                <td>${ft.maximumFare}</td>
+                <td>
+                    <button onclick="editFareType('${ft._id}')">Edit</button>
+                    <button onclick="deleteFareType('${ft._id}')">Delete</button>
+                </td>
+            </tr>
+        `;
+    });
+    tbody.innerHTML = html;
+}
+
+function setupFareTypeForm() {
+    const form = document.getElementById('fareTypeForm');
+    if (!form) return;
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const data = {
+            fareName: document.getElementById('fareName').value.trim(),
+            fareType: document.getElementById('fareTypeSelect').value,
+            minimumFare: parseFloat(document.getElementById('minimumFare').value),
+            maximumFare: parseFloat(document.getElementById('maximumFare').value)
+        };
+        if (!data.fareName || !data.fareType || isNaN(data.minimumFare) || isNaN(data.maximumFare)) {
+            showToast('All fields required');
+            return;
+        }
+        try {
+            let res;
+            if (editFareTypeId) {
+                // UPDATE
+                res = await fetch(`/api/fareTypes/${editFareTypeId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                if (res.ok) {
+                    showToast('Fare type updated');
+                    editFareTypeId = null;
+                    document.getElementById('fareTypeFormTitle').innerText = 'Add Fare Type';
+                    document.getElementById('fareTypeSubmitBtn').innerText = 'Save Fare Type';
+                }
+            } else {
+                // CREATE
+                res = await fetch('/api/fareTypes', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                if (res.ok) showToast('Fare type added');
+            }
+            if (res.ok) {
+                form.reset();
+                await loadFareTypes();
+                showSection('fareTypes');
+            } else {
+                const err = await res.json();
+                showToast(err.error || 'Operation failed');
+            }
+        } catch (err) {
+            showToast('Error saving fare type');
+        }
+    });
+}
+
+async function editFareType(id) {
+    const ft = fareTypes.find(x => x._id === id);
+    if (!ft) return;
+    document.getElementById('fareName').value = ft.fareName;
+    document.getElementById('fareTypeSelect').value = ft.fareType;
+    document.getElementById('minimumFare').value = ft.minimumFare;
+    document.getElementById('maximumFare').value = ft.maximumFare;
+    editFareTypeId = id;
+    document.getElementById('fareTypeFormTitle').innerText = 'Edit Fare Type';
+    document.getElementById('fareTypeSubmitBtn').innerText = 'Update Fare Type';
+    showSection('fareTypes');
+}
+
+async function deleteFareType(id) {
+    try {
+        const res = await fetch(`/api/fareTypes/${id}`, { method: 'DELETE' });
+        if (res.ok) {
+            showToast('Fare type deleted');
+            await loadFareTypes();
+        } else {
+            showToast('Delete failed');
+        }
+    } catch (err) {
+        showToast('Error deleting');
+    }
 }

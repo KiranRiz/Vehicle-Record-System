@@ -3,6 +3,8 @@ const path = require('path');
 const recordsRouter = require('./routes/records');
 const usersRouter = require('./routes/users');
 const agreementsRouter = require('./routes/agreements');
+const fareTypesRouter = require('./routes/fareTypes');
+
 
 const app = express();
 
@@ -14,6 +16,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/records', recordsRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/agreements', agreementsRouter);
+app.use('/api/fareTypes', fareTypesRouter);
+
 
 // Serve client assets
 const jsPath = path.join(__dirname, '../..', 'js');

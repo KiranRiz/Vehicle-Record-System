@@ -324,7 +324,7 @@
                 <h2>Manage Fare Types</h2>
                 <div class="card">
                     <div class="card-header">
-                        <h2>Add Fare Type</h2>
+                        <h2 id="fareTypeFormTitle">Add Fare Type</h2>
                     </div>
                     <div class="card-body">
                         <form id="fareTypeForm" class="inline-form">
@@ -334,14 +334,12 @@
                                     <input type="text" id="fareName" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="fareDay">Fare Day</label>
-                                    <select id="fareDay" required>
+                                    <label for="fareTypeSelect">Fare Type</label>
+                                    <select id="fareTypeSelect" required>
                                         <option value="">-- Select --</option>
-                                        <option value="Weekend Fare">Weekend Fare</option>
-                                        <option value="Special Holiday Fare">Special Holiday Fare</option>
-                                        <option value="Normal Day Fare">Normal Day Fare</option>
-                                        <option value="Minimum Fare">Minimum Fare</option>
-                                        <option value="Maximum Fare">Maximum Fare</option>
+                                        <option value="Fixed">Fixed</option>
+                                        <option value="Metered">Metered</option>
+                                        <option value="Dynamic">Dynamic</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -366,14 +364,15 @@
                         <thead>
                             <tr>
                                 <th>Fare Name</th>
-                                <th>Fare Day</th>
+                                <th>Fare Type</th>
                                 <th>Minimum Fare</th>
                                 <th>Maximum Fare</th>
+                                <th>Actions</th>   
                             </tr>
                         </thead>
                         <tbody id="fareTypeListBody">
                             <tr>
-                                <td colspan="4" class="empty-faretype">No fare types found</td>
+                                <td colspan="5" class="empty-faretype">No fare types found</td>
                             </tr>
                         </tbody>
                     </table>
