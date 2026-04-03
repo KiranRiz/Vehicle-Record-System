@@ -526,8 +526,8 @@ function renderAgreementTable() {
       <tr>
         <td>${new Date(ag.startDate).toLocaleDateString()}</td>
         <td>${new Date(ag.endDate).toLocaleDateString()}</td>
-        <td>${ag.seatingCapacity}</td>
-        <td>${ag.fareType}</td>
+        <td>${ag.agreementName}</td>
+        <td>${ag.fareName}</td>
         <td>
           <button onclick="editAgreement('${ag._id}')">Edit</button>
           <button onclick="deleteAgreement('${ag._id}')">Delete</button>
@@ -547,10 +547,10 @@ function setupAgreementForm() {
         const agreementData = {
             startDate: document.getElementById('startDate').value,
             endDate: document.getElementById('endDate').value,
-            seatingCapacity: parseInt(document.getElementById('seatingCapacity').value),
-            fareType: document.getElementById('fareType').value
+            agreementName: document.getElementById('agreementName').value.trim(),
+            fareName: document.getElementById('agreementFareName').value
         };
-        if (!agreementData.startDate || !agreementData.endDate || !agreementData.seatingCapacity || !agreementData.fareType) {
+        if (!agreementData.startDate || !agreementData.endDate || !agreementData.agreementName || !agreementData.fareName) {
             showToast('All fields required');
             return;
         }
@@ -595,8 +595,8 @@ async function editAgreement(id) {
     if (!agreement) return;
     document.getElementById('startDate').value = agreement.startDate.substring(0, 10);
     document.getElementById('endDate').value = agreement.endDate.substring(0, 10);
-    document.getElementById('seatingCapacity').value = agreement.seatingCapacity;
-    document.getElementById('fareType').value = agreement.fareType;
+    document.getElementById('agreementName').value = agreement.agreementName;
+    document.getElementById('agreementFareName').value = agreement.fareName;
     editAgreementId = id;
     document.getElementById('agreementFormTitle').innerText = 'Edit Agreement';
     document.getElementById('agreementSubmitBtn').innerText = 'Update Agreement';
@@ -617,14 +617,28 @@ async function deleteAgreement(id) {
     }
 }
 
+// Populate Agreement form's Fare Type dropdown with Fare Names from fareTypes array
+function populateAgreementFareTypeDropdown() {
+    const select = document.getElementById('agreementFareName');
+    if (!select) return;
+
+    select.innerHTML = '<option value="">-- Select --</option>';
+    fareTypes.forEach(ft => {
+        const option = document.createElement('option');
+        option.value = ft.fareName;
+        option.textContent = ft.fareName;
+        select.appendChild(option);
+    });
+}
 
 // Fare Type related functions
 async function loadFareTypes() {
     try {
-        const res = await fetch('/api/fareTypes');   
+        const res = await fetch('/api/fareTypes');
         if (!res.ok) throw new Error('Failed to load');
         fareTypes = await res.json();
         renderFareTypeTable();
+        populateAgreementFareTypeDropdown();
     } catch (err) {
         showToast('Error loading fare types');
     }

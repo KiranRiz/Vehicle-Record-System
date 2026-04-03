@@ -4,8 +4,8 @@ const agreementSchema = new Schema(
   {
     startDate: { type: Date, required: true},
     endDate: { type: Date, required: true},
-    seatingCapacity: { type: Number, required: true, min:1},
-    fareType: { type: String, required: true, enum : ['Fixed', 'Metered', 'Dynamic'], default: 'Fixed' }, 
+    agreementName: { type: String, required: true, trim: true },
+    fareName: { type: String, required: true, trim: true }, 
   },
   {
     timestamps: true

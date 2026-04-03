@@ -16,11 +16,11 @@ router.get('/', async (req, res) => {
 // POST create new agreement
 router.post('/', async (req, res) => {
   try {
-    const { startDate, endDate, seatingCapacity, fareType } = req.body;
-    if (!startDate || !endDate || !seatingCapacity || !fareType) {
+    const { startDate, endDate, agreementName, fareName } = req.body;
+    if (!startDate || !endDate || !agreementName || !fareName) {
       return res.status(400).json({ error: 'All fields are required' });
     }
-    const agreement = new Agreement({ startDate, endDate, seatingCapacity, fareType });
+    const agreement = new Agreement({ startDate, endDate, agreementName, fareName });
     await agreement.save();
     res.status(201).json(agreement);
   } catch (err) {
