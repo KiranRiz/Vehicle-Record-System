@@ -1,3 +1,4 @@
+const fs = require('fs');
 const express = require('express');
 const path = require('path');
 const recordsRouter = require('./routes/records');
@@ -18,18 +19,21 @@ app.use('/api/users', usersRouter);
 app.use('/api/agreements', agreementsRouter);
 app.use('/api/fareTypes', fareTypesRouter);
 
-
-// Serve client assets
 const jsPath = path.join(__dirname, '../..', 'js');
-app.use('/js', express.static(jsPath));
-
-// Serve the frontend files
 const frontendPath = path.join(__dirname, '../..', 'frontend');
-app.use(express.static(frontendPath));
+const hasStaticAssets = fs.existsSync(jsPath) && fs.existsSync(frontendPath);
 
-// Fallback to index.html for SPA routes
-app.use((req, res) => {
-  res.sendFile(path.join(frontendPath, 'index.html'));
-});
+if (hasStaticAssets) {
+  app.use('/js', express.static(jsPath));
+  app.use(express.static(frontendPath));
+
+  app.use((req, res) => {
+    res.sendFile(path.join(frontendPath, 'index.html'));
+  });
+} else {
+  app.use((req, res) => {
+    res.status(404).json({ error: 'Not found' });
+  });
+}
 
 module.exports = app;
