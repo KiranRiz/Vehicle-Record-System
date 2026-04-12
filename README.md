@@ -14,57 +14,57 @@ Based on my experience at AbsoluteIT, agreements were linked to drivers, causing
 ## System Requirements
 - Following are the system requirements
 
- # Functional Requirements
+## Functional Requirements
 
- # CRUD – Vehicle Service Records
+## CRUD – Vehicle Service Records
   - Create: Employee can add a new vehicle service record
   - Read:   Employee can view all vehicle records
   - Update: Employee can edit any existing record
   - Delete: Employee can delete any record
 
-  # CRUD - User (Driver) Management
+## CRUD - User (Driver) Management
   - Create: Employee can add a new driver
   - Read:   Employee can view all drivers with their assigned vehicles
   - Update: Employee can edit driver details
   - Delete: Employee can remove a driver record
 
-  # CRUD - Agreement Management
+## CRUD - Agreement Management
   - Create: Employee can create a new agreement
   - Read:   Employee can view all agreements with vehicle and driver details
   - Update: Employee can edit existing agreement details (dates, fare type, fare limits)
   - Delete: Employee can remove an agreement
 
-  # CRUD - FareType Mnagemant
+## CRUD - FareType Mnagemant
   - Create: Employee can define a new fare type (Fixed, Dynamic, Metered)
   - Read:   Employee can view all available fare types
   - Update: Employee can modify fare type rates and rules
   - Delete: Empoyee can remove a fare type
 
-  # CSV Export
+## CSV Export
   - Export: Employee can download service records as CSV file
   - Export: Empoyee can download driver records as CSV file
 
-# Non‑Functional Requirements
+## Non‑Functional Requirements
 
-  # Usability: 
+## Usability: 
   - Simple interface 
   - Sidebar navigation
   - Toast notifications
 
-  # Performance: 
+## Performance: 
   - API responses fast table rendering
 
-  # Reliability: 
+## Reliability: 
   - Data persists in MongoDB
   - No loss on refresh
 
-  # Maintainability: 
+## Maintainability: 
   - Clean separation of all frontend files (HTML/CSS/JS)
   - Clean separation of all backend files (Node.js/Express)
 
 ## Data Requirements & Storage
-# Entities & Fields
-# Vehicle Record
+## Entities & Fields
+## Vehicle Record
 | Field     | Type     | Description                |
 |-----------|----------|----------------------------|
 | vehicle   | String   | Name of the vehicle        |
@@ -79,7 +79,7 @@ Based on my experience at AbsoluteIT, agreements were linked to drivers, causing
 | createdAt | Date     | Auto-generated             |
 | updatedAt | Date     | Auto-generated             |
 
-# User (Driver)
+## User (Driver)
 
 | Field           | Type   | Description                   |
 |-----------------|--------|-------------------------------|
@@ -89,7 +89,7 @@ Based on my experience at AbsoluteIT, agreements were linked to drivers, causing
 | assignDate      | Date   | Date when vehicle assigned    |
 | assignedVehicle | String | Vehicle registration number   |
 
-# Agreement
+## Agreement
 
 | Field         | Type   | Description                   |
 |---------------|--------|-------------------------------|
@@ -99,7 +99,7 @@ Based on my experience at AbsoluteIT, agreements were linked to drivers, causing
 | Agreement Name| String | Minimum fare amount           |
 
 
-#### FareType
+## FareType
 | Field     | Type   | Description               |
 |-----------|--------|---------------------------|
 |  fareName | String | Name of the fare          |
@@ -107,7 +107,7 @@ Based on my experience at AbsoluteIT, agreements were linked to drivers, causing
 |  minFare  | Number | Minimum fare amount       |
 |  maxFare  | Number | Maximum fare amount       |
 
-# Entity Relationships
+## Entity Relationships
 
 - One fare type can be used in many agreements.
 - One agreement belongs can be assign to many vehicle.
@@ -116,21 +116,21 @@ Based on my experience at AbsoluteIT, agreements were linked to drivers, causing
 
 ## Storage Choice - MongoDB
 
-# Why MongoDB?
+## Why MongoDB?
 - Flexible schema
 - JSON‑like documents direct map to JavaScript objects
 - Easy to add new fields later without migrations
 - Docker container portable, no local install needed
 
 ## System Architecture (Three‑Tier)
-# Frontend (Client‑Side)
+## Frontend (Client‑Side)
 - The UI seen in the browser is the frontend.
 - It is a Single Page Application (SPA).
 - No page refresh – everything updates dynamically.
 - When a employee clicks a button (e.g., "Submit Record"), the frontend sends a request to the backend using the `fetch()` API.
 - Features: sidebar navigation, forms, dynamic table, toast notifications, searach, dropdowns.
 
-# Backend (Server‑Side)
+## Backend (Server‑Side)
 - Built with Node.js + Express.js.
 - Listens to requests from the frontend and responds.
 - On GET request, backend fetches data from the database and sends JSON.
@@ -138,14 +138,14 @@ Based on my experience at AbsoluteIT, agreements were linked to drivers, causing
 - Middleware: express.json() (to understand JSON data).
 - Backend also serves frontend files (HTML, CSS, JS) statically.
 
-# Database (MongoDB)
+## Database (MongoDB)
 - NoSQL database.
 - Runs inside a Docker container (`mongo:latest`).
 - Uses Mongoose ODM (schema, validation, queries).
 - Data is stored permanently and can be modify.
 - Data remains safe after page refresh or server restart
 
-### Communication Flow
+## Communication Flow
 - Step 1: User performs an action in the frontend (e.g., form submit).
 - Step 2: Frontend sends an HTTP request to the backend via `fetch()`.
 - Step 3: Backend receives the request.
@@ -156,25 +156,25 @@ Based on my experience at AbsoluteIT, agreements were linked to drivers, causing
 - Step 8: Frontend updates the DOM without reloading the page.
 
 ## Feature    
-# Vehicle Records
+## Vehicle Records
 - Add Vehicle: Add a new vehicle service record with vehicle name, registration number, etc.
 - View Vehicle: View all vehicle records in a table.
 - Update Vehicle: Edit any existing vehicle record.
 - Delete Vehicle: Permanently remove a vehicle record.
 
-# Users / Drivers
+## Users / Drivers
 - Add driver: Add a new driver with name, registration ID, mobile, assignment date, and assigned vehicle.
 - View driver: View all drivers with their assigned vehicles.
 - Update driver: Edit driver details (name, mobile, assigned vehicle, etc.).
 - Delete driver: Remove a driver record.
 
-# Agreements
+## Agreements
 - Create agreement: Create a new agreement.
 - View agreement: View all agreements with vehicle and driver details.
 - Update agreement: Edit existing agreement details (dates, fare type, fare limits).
 - Delete agreement: Remove an agreement.
 
-# Fare Types
+## Fare Types
 - Add fare: Define a new fare type.
 - View fare: View all available fare types.
 - Update fare: Modify fare type rules.
@@ -182,29 +182,29 @@ Based on my experience at AbsoluteIT, agreements were linked to drivers, causing
 
 ## Additional Features
 
- # Search Features
+## Search Features
 - Vehicle Records Table: Real‑time filter by registration number.
 - User Records Table: Real‑time filter by driver registration number.
 - Vehicle Info Search:  Button‑based check to verify if a vehicle exists before saving addInfo.
 
-# Dropdowns Used
+## Dropdowns Used
 - Assign Vehicle: User Management form; shows only existing vehicle registration numbers so drivers get valid vehicles.
 - Agreement Name: Vehicle Information section; lists all saved agreements to attach one to a vehicle record.
 - Fare Name: Agreement form; populated from Fare Types so each agreement gets a valid fare (e.g., Standard).
 
-# CSV Export: 
+## CSV Export: 
 - Download all service records and driver records as CSV files.
 
-# Toast Notifications:
+## Toast Notifications:
 - Non‑intrusive feedback for every action (add, edit, delete, save).
 
-# Unique Validation: 
+## Unique Validation: 
 - No duplicate registration numbers for vehicles or drivers.
 
-# Sidebar Navigation: 
+## Sidebar Navigation: 
 - Easy access to all sections.
 
-# API Endpoints Used in the Project
+## API Endpoints Used in the Project
   All endpoints are relative to http://localhost:3000/api/records
 
   Method   |     Endpoint           |   Description
@@ -243,7 +243,7 @@ Based on my experience at AbsoluteIT, agreements were linked to drivers, causing
 
 ## Testing
 
-# Unit Tests (Jest)
+## Unit Tests (Jest)
 
 Unit tests are written in `backend/tests/users.test.js` for the User (Driver) CRUD API. 
 The following test cases are implemented:
@@ -263,16 +263,16 @@ The following test cases are implemented:
 | DELETE /users/:id when user not found | 404 Not Found           | Throws error  |
 | DELETE /users/:id on database error | 500 Internal Server Error | Throws error  |
 
-# Run the Tests
+## Run the Tests
 - bash
 - cd backend
 - npm test  (To run all test cases)
 - npm test -- users.test.js (To run single file)
 
-# AI help Commits 
+## AI help Commits 
 - Update PUT route to save agreementName using $set and bypass strict mode (Commit dc0539d) 
 
-# How to run the Project?
+## How to run the Project?
 - Prerequisites: Docker and Docker Composed Installed
 - Clone the repository
 - In project folder run this command to start container: docker compose up -d
@@ -281,13 +281,13 @@ The following test cases are implemented:
 
 
 ## Learning Resources
-  Resource	       |        Purpose                     |   Youtube Toturial
-  Node.js          |  JavaScript runtime for backend    |   https://nodejs.org/
-  Express.js       |   Web framework for Node.js        |   https://expressjs.com/
-  MongoDB Container|   How to run                       |   https://hub.docker.com/_/mongo
-  Request Methods  |   To know about APIs calls         |   https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference
-  MongoDB          |   NoSQL database                   |   https://www.mongodb.com/
-  Docker           |   Containerisation for MongoDB     |   https://www.docker.com/
-  CRUD API Tutorial|   Node, Express, MongoDB:          |   https://www.youtube.com/watch?v=_7UQPve99r4
-  CRUD Operations  |   learn MongoDB                    |   https://www.youtube.com/watch?v=ZMEVI1Y7FtY
+  Resource	       |   Youtube Toturial
+  Node.js          |   https://nodejs.org/
+  Express.js       |   https://expressjs.com/
+  MongoDB Container|   https://hub.docker.com/_/mongo
+  Request Methods  |   https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference
+  MongoDB          |   https://www.mongodb.com/
+  Docker           |   https://www.docker.com/
+  CRUD API Tutorial|   https://www.youtube.com/watch?v=_7UQPve99r4
+  CRUD Operations  |   https://www.youtube.com/watch?v=ZMEVI1Y7FtY
  
