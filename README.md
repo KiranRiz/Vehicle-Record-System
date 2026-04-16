@@ -279,6 +279,7 @@ The following test cases are implemented:
 - Access on http://localhost:3000 
 - To stop the container: docker compose down
 
+## You can access the live application at: http://54.221.18.93/
 
 ## Learning Resources
   Resource	       |   Youtube Toturial
